@@ -50,8 +50,7 @@ public class GangPromoteCMD extends SubcommandBase {
 			return;
 		}
 
-
-		//TODO: promote
+		gang.get().gangPromote(target.getUniqueId(), player.getUniqueId());
 
 	}
 

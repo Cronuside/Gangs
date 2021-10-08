@@ -50,7 +50,7 @@ public class GangTransferCMD extends SubcommandBase {
 			return;
 		}
 
-		// TODO: Gang transfer system
+		gang.get().gangTransfer(target.getUniqueId(), player.getUniqueId());
 
 	}
 

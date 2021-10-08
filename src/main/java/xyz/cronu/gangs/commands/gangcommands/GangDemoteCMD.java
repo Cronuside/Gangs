@@ -50,6 +50,7 @@ public class GangDemoteCMD extends SubcommandBase {
 			return;
 		}
 
+		gang.get().gangDemote(target.getUniqueId(), player.getUniqueId());
 
 	}
 

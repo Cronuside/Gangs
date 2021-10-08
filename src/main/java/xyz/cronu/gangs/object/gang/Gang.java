@@ -7,6 +7,7 @@ import xyz.cronu.gangs.managers.GangManager;
 import xyz.cronu.gangs.object.perk.Perk;
 import xyz.cronu.gangs.object.perk.PerkType;
 import xyz.cronu.gangs.utils.Colorize;
+import xyz.cronu.gangs.utils.Number;
 
 import java.util.*;
 
@@ -96,6 +97,80 @@ public class Gang {
 
 	}
 
+	public void gangDemote(UUID target, UUID sender){
+		if(!isGangMember(target)) {
+			Colorize.message(sender, "&cThis player is not in your gang!");
+			return;
+		}
+
+		Optional<GangMember> targetMember = getGangMember(target);
+		Optional<GangMember> senderMember = getGangMember(sender);
+		if(!targetMember.isPresent() || !senderMember.isPresent()) return;
+
+		if(targetMember.get().getGangRank() == GangRank.LEADER){
+			Colorize.message(sender, "&cYou cannot demote the leader!");
+			return;
+		}
+
+		if(!senderMember.get().hasDemotePermission() || !senderMember.get().hasAllPermissions() || senderMember.get().getGangRank() != GangRank.LEADER){
+			Colorize.message(sender, "&cYou do not have permission to do this!");
+			return;
+		}
+
+		if(targetMember.get().getGangRank() == GangRank.RECRUIT) {
+			Colorize.message(sender, "&cThis player cannot be demoted any further!");
+			return;
+		}
+
+
+		GangRank previousRank = targetMember.get().getPreviousRank();
+		targetMember.get().setGangRank(previousRank);
+
+		Colorize.message(target, "&aYou've been demoted to " + previousRank.name() + "!");
+		Colorize.message(sender, "&aYou've successfully demoted this player to " + previousRank.name() + "!");
+		sendMessageToAllMembers("&a" + targetMember.get().getMemberName() + " has been demoted to " + previousRank.name() + "!");
+
+		gangManager.saveGang(this);
+
+	}
+
+	public void gangPromote(UUID target, UUID sender){
+		if(!isGangMember(target)) {
+			Colorize.message(sender, "&cThis player is not in your gang!");
+			return;
+		}
+
+		Optional<GangMember> targetMember = getGangMember(target);
+		Optional<GangMember> senderMember = getGangMember(sender);
+		if(!targetMember.isPresent() || !senderMember.isPresent()) return;
+
+		if(targetMember.get().getGangRank() == GangRank.LEADER){
+			Colorize.message(sender, "&cYou cannot promote the leader!");
+			return;
+		}
+
+		if(!senderMember.get().hasPromotePermission() || !senderMember.get().hasAllPermissions() || senderMember.get().getGangRank() != GangRank.LEADER){
+			Colorize.message(sender, "&cYou do not have permission to do this!");
+			return;
+		}
+
+		if(targetMember.get().getGangRank() == GangRank.LEADER) {
+			Colorize.message(sender, "&cThis player cannot be promoted any further!");
+			return;
+		}
+
+
+		GangRank nextRank = targetMember.get().getNextRank();
+		targetMember.get().setGangRank(nextRank);
+
+		Colorize.message(target, "&aYou've been promoted to " + nextRank.name() + "!");
+		Colorize.message(sender, "&aYou've successfully promoted this player to " + nextRank.name() + "!");
+		sendMessageToAllMembers("&a" + targetMember.get().getMemberName() + " has been promoted to " + nextRank.name() + "!");
+
+		gangManager.saveGang(this);
+
+	}
+
 	/*
 		Creates a new instance of a GangMember and adds them into the gang.
 		After doing this, it saves the gang data to config so that everything
@@ -178,12 +253,46 @@ public class Gang {
 		}
 	}
 
+	public void gangTransfer(UUID target, UUID sender){
+		if(!isGangMember(target)) {
+			Colorize.message(sender, "&cThis player is not in your gang!");
+			return;
+		}
+
+		Optional<GangMember> targetMember = getGangMember(target);
+		Optional<GangMember> senderMember = getGangMember(sender);
+		if(!targetMember.isPresent() || !senderMember.isPresent()) return;
+
+		if(senderMember.get().getGangRank() != GangRank.LEADER) {
+			Colorize.message(sender, "&cYou do not have permission to do this!");
+			return;
+		}
+
+		senderMember.get().setGangRank(GangRank.RECRUIT);
+		targetMember.get().setGangRank(GangRank.LEADER);
+
+		Colorize.message(sender, "&aYou've transferred gang ownership to " + targetMember.get().getMemberName() + "!");
+		Colorize.message(target, "&aGang Ownership of " + getGangName() + " has been transferred to you!");
+		sendMessageToAllMembers("&aGang Ownership has been transferred to " + targetMember.get().getMemberName() + "!");
+
+		gangManager.saveGang(this);
+	}
+
 	public long getTotalBlocksBrokenMembers(){
 		long value = 0;
 		for(GangMember gangMember : getGangMembers()){
 			value+=gangMember.getBlocksMined();
 		}
 		return value;
+	}
+
+	public void gangFlex(){
+		Colorize.broadcast("&7&m-------------&r &2&l" + getGangName() + " &7&m-------------");
+		Colorize.broadcast("&aLevel: " + Number.pretty(getGangStat().getGangLevel()));
+		Colorize.broadcast("&aPrestige: " + Number.pretty(getGangStat().getGangPrestige()));
+		Colorize.broadcast("&aMembers: " + Number.pretty(getGangMembers().size()));
+		Colorize.broadcast("&aTotal Blocks: " + Number.pretty(getTotalBlocksBrokenMembers()));
+		Colorize.broadcast("&7&m--------------------------------------");
 	}
 
 	public void sendMessageToAllMembers(String message){

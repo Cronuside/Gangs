@@ -34,6 +34,33 @@ public class GangMember {
 		this.points = points;
 	}
 
+	public GangRank getPreviousRank(){
+		int hierarchy = getGangRank().getHierarchy();
+		switch (hierarchy){
+			case 1:
+				return GangRank.RECRUIT;
+			case 2:
+				return GangRank.MEMBER;
+			case 3:
+				return GangRank.OFFICER;
+		}
+		return GangRank.RECRUIT;
+	}
+
+	public GangRank getNextRank(){
+		int hierarchy = getGangRank().getHierarchy();
+		switch (hierarchy){
+			case 0:
+				return GangRank.MEMBER;
+			case 1:
+			case 2:
+				return GangRank.OFFICER;
+			case 3:
+				return GangRank.LEADER;
+		}
+		return GangRank.RECRUIT;
+	}
+
 	public void removePermission(GangPermissions permission){
 		if(!hasPermission(permission)) return;
 		memberPermissions.remove(permission);
@@ -42,6 +69,14 @@ public class GangMember {
 	public void addPermission(GangPermissions permission){
 		if(hasPermission(permission)) return;
 		memberPermissions.add(permission);
+	}
+
+	public boolean hasTransferPermission(){
+		return hasPermission(GangPermissions.TRANSFER);
+	}
+
+	public boolean hasDemotePermission(){
+		return hasPermission(GangPermissions.DEMOTE);
 	}
 
 	public boolean hasPromotePermission(){

@@ -7,6 +7,15 @@ package xyz.cronu.gangs.object.gang;
 
 public enum GangRank {
 
-	RECRUIT, MEMBER, OFFICER, LEADER
+	RECRUIT(0), MEMBER(1), OFFICER(2), LEADER(3);
 
+	private int hierarchy;
+
+	GangRank(int hierarchy){
+		this.hierarchy = hierarchy;
+	}
+
+	public int getHierarchy() {
+		return hierarchy;
+	}
 }

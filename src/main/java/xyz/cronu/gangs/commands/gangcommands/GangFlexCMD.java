@@ -47,8 +47,7 @@ public class GangFlexCMD extends SubcommandBase {
 			return;
 		}
 
-		// TODO: Flex
-
+		gang.get().gangFlex();
 
 	}
 
