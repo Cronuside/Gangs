@@ -5,7 +5,6 @@ import xyz.cronu.gangs.commands.CommandBase;
 import xyz.cronu.gangs.commands.gangcommands.GangCMD;
 import xyz.cronu.gangs.config.ConfigManager;
 import xyz.cronu.gangs.managers.GangManager;
-import xyz.cronu.gangs.managers.InviteManager;
 
 import java.util.Arrays;
 
@@ -14,7 +13,6 @@ public final class Gangs extends JavaPlugin {
 	private static Gangs plugin;
 	private static GangManager gangManager;
 	private static ConfigManager configManager;
-	private static InviteManager inviteManager;
 
 	@Override
 	public void onEnable() {
@@ -23,7 +21,6 @@ public final class Gangs extends JavaPlugin {
 		ConfigManager.getInstance().setPlugin(this);
 		configManager = ConfigManager.getInstance();
 		gangManager = new GangManager(this);
-		inviteManager = new InviteManager(this);
 
 		initializeCommands(new GangCMD());
 		gangManager.loadGangs();
@@ -51,10 +48,6 @@ public final class Gangs extends JavaPlugin {
 
 	public static Gangs getPlugin() {
 		return plugin;
-	}
-
-	public InviteManager getInviteManager() {
-		return inviteManager;
 	}
 
 	public ConfigManager getConfigManager() {

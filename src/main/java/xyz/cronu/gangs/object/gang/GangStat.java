@@ -13,13 +13,13 @@ public class GangStat {
 	private long gangLevel;
 	private long gangPrestige;
 
-	public GangStat(long gangBlocksMined, long gangLevel, long gangPrestige) {
+	public GangStat(long gangBlocksMined, long gangLevel, long gangPrestige) { // Loads new Gang Stat
 		this.gangBlocksMined = gangBlocksMined;
 		this.gangLevel = gangLevel;
 		this.gangPrestige = gangPrestige;
 	}
 
-	public GangStat(ConfigurationSection configurationSection, String gangName) {
+	public GangStat(ConfigurationSection configurationSection, String gangName) { // Loads existing Gang Stat
 		this.gangBlocksMined = configurationSection.getLong(gangName + ".blocks_mined");
 		this.gangLevel = configurationSection.getLong(gangName + ".level");
 		this.gangPrestige = configurationSection.getLong(gangName + ".prestige");

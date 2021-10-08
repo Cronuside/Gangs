@@ -1,7 +1,11 @@
 package xyz.cronu.gangs.object.gang;
 
 import xyz.cronu.gangs.object.perk.Perk;
+import xyz.cronu.gangs.object.perk.PerkType;
+import xyz.cronu.gangs.utils.Number;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,8 +44,44 @@ public class GangMember {
 		memberPermissions.add(permission);
 	}
 
+	public boolean hasPromotePermission(){
+		return hasPermission(GangPermissions.PROMOTE);
+	}
+
+	public boolean hasKickPermission(){
+		return hasPermission(GangPermissions.KICK);
+	}
+
+	public boolean hasDisbandPermission(){
+		return hasPermission(GangPermissions.DISBAND);
+	}
+
+	public boolean hasInvitePermission(){
+		return hasPermission(GangPermissions.INVITE);
+	}
+
+	public boolean hasAllPermissions(){
+		return hasPermission(GangPermissions.ALL);
+	}
+
 	public boolean hasPermission(GangPermissions permission){
 		return memberPermissions.contains(permission);
+	}
+
+	public void addPoints(long amount){
+		setPoints(Number.add(getPoints(), amount));
+	}
+
+	public void addBlocksMined(long amount){
+		setBlocksMined(Number.add(getBlocksMined(), amount));
+	}
+
+	public void takeBlocksMined(long amount){
+		setBlocksMined(Number.take(getBlocksMined(), amount));
+	}
+
+	public void takePoints(long amount){
+		setPoints(Number.take(getPoints(), amount));
 	}
 
 	public void setMember(UUID member) {
@@ -99,4 +139,17 @@ public class GangMember {
 	public long getPoints() {
 		return points;
 	}
+
+	public void reset(){
+		setBlocksMined(0);
+		setPoints(0);
+		setGangRank(GangRank.RECRUIT);
+		setMemberPerks(new ArrayList<>(Arrays.asList(
+				new Perk(PerkType.POINT, 1),
+				new Perk(PerkType.BLOCK, 1),
+				new Perk(PerkType.MONEY, 1)
+		)));
+		setMemberPermissions(new ArrayList<>());
+	}
+
 }

@@ -7,6 +7,7 @@ package xyz.cronu.gangs.object.gang;
 
 public enum GangPermissions {
 
-	INVITE, KICK, DISBAND, PROMOTE, ALL
+	INVITE, KICK, DISBAND, PROMOTE, ALL;
+
 
 }
