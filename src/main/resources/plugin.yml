@@ -5,7 +5,3 @@ api-version: 1.16
 authors: [ Cronu ]
 description: Custom Gangs Plugin
 website: cronu.xyz
-commands:
-  gang:
-    description: Gangs Command Base
-    aliases: [g, gangs]

@@ -138,7 +138,6 @@ public class Gang {
 			return;
 		}
 
-
 		Colorize.message(sender, "&aYou've successfully kicked this player from your gang!");
 		sendMessageToAllMembers("&a" + targetMember.get().getMemberName() + " has been kicked from your gang!");
 		gangMembers.remove(targetMember.get());
@@ -157,7 +156,7 @@ public class Gang {
 		if(senderMember.get().getGangRank() == GangRank.LEADER && gangMembers.size() > 1){
 			Colorize.message(sender, "&cYou cannot leave the gang as you're leader.");
 		} else if(gangMembers.size() == 1){
-			disbandGang();
+			disbandGang(sender);
 		} else {
 			sendMessageToAllMembers("&a" + senderMember.get().getMemberName() + " has left the gang!");
 			gangMembers.remove(senderMember.get());
@@ -169,9 +168,22 @@ public class Gang {
 		Deletes the gang entirely from the server,
 		this can never be undone.
 	 */
-	public void disbandGang(){
-		Colorize.broadcast("&a" + getGangName() + " has been disbanded!");
-		gangManager.removeGang(this);
+	public void disbandGang(UUID sender){
+		Optional<GangMember> senderMember = getGangMember(sender);
+		if(!senderMember.isPresent()) return;
+
+		if(senderMember.get().getGangRank() == GangRank.LEADER || senderMember.get().hasAllPermissions() || senderMember.get().hasDisbandPermission()) {
+			Colorize.broadcast("&a" + getGangName() + " has been disbanded!");
+			gangManager.removeGang(this);
+		}
+	}
+
+	public long getTotalBlocksBrokenMembers(){
+		long value = 0;
+		for(GangMember gangMember : getGangMembers()){
+			value+=gangMember.getBlocksMined();
+		}
+		return value;
 	}
 
 	public void sendMessageToAllMembers(String message){

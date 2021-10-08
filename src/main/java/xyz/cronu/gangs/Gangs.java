@@ -2,7 +2,6 @@ package xyz.cronu.gangs;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.cronu.gangs.commands.CommandBase;
-import xyz.cronu.gangs.commands.gangcommands.GangCMD;
 import xyz.cronu.gangs.config.ConfigManager;
 import xyz.cronu.gangs.managers.GangManager;
 
@@ -22,8 +21,8 @@ public final class Gangs extends JavaPlugin {
 		configManager = ConfigManager.getInstance();
 		gangManager = new GangManager(this);
 
-		initializeCommands(new GangCMD());
 		gangManager.loadGangs();
+		gangManager.createGang();
 
 		loadedMessage();
 	}

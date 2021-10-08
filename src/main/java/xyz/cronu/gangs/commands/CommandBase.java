@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import xyz.cronu.gangs.utils.Colorize;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,11 @@ public abstract class CommandBase implements CommandExecutor, TabCompleter {
 			for (SubcommandBase subcommand : getSubcommands()) {
 				if (args[0].equalsIgnoreCase(subcommand.getName()) ||
 						Arrays.stream(subcommand.getAliases()).anyMatch(name -> args[0].equalsIgnoreCase(name))) {
+					if(args.length == subcommand.requiredArgs()) {
 						subcommand.perform(sender, args);
+					} else {
+						Colorize.message(sender, subcommand.getSyntax());
+					}
 				}
 			}
 		} else {
