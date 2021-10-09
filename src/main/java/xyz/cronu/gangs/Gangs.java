@@ -36,7 +36,7 @@ public final class Gangs extends JavaPlugin {
 		System.out.println("--------- GANGS 1.0 ---------");
 		System.out.println("");
 		System.out.println(plugin.getName() + " loaded using " + plugin.getServer().getVersion());
-		System.out.println("Developed by: Cronu#0646");
+		System.out.println("Developed by: foggies#6281");
 		System.out.println("");
 		System.out.println("--------- GANGS 1.0 ---------");
 	}
