@@ -1,17 +1,13 @@
 package xyz.cronu.gangs.commands.gangcommands;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import xyz.cronu.gangs.Gangs;
 import xyz.cronu.gangs.commands.SubcommandBase;
-import xyz.cronu.gangs.object.gang.Gang;
-import xyz.cronu.gangs.utils.Colorize;
+import xyz.cronu.gangs.menus.GangTopMenu;
+import xyz.cronu.gangs.object.gang.GangTopType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class GangTopCMD extends SubcommandBase {
 	@Override
@@ -26,12 +22,12 @@ public class GangTopCMD extends SubcommandBase {
 
 	@Override
 	public String getSyntax() {
-		return "/gang top";
+		return "/gang top <type>";
 	}
 
 	@Override
 	public int requiredArgs() {
-		return 1;
+		return 2;
 	}
 
 	@Override
@@ -42,15 +38,9 @@ public class GangTopCMD extends SubcommandBase {
 		}
 
 		Player player = (Player) sender;
-		OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+		String type = args[1];
 
-		Optional<Gang> gang = Gangs.getPlugin().getGangManager().getGangByMember(player.getUniqueId());
-		if(!gang.isPresent()){
-			Colorize.message(player, "&cYou're not in a gang!");
-			return;
-		}
-
-		// TODO: Top stats menu or something...
+		new GangTopMenu(player, GangTopType.valueOf(type.toUpperCase())).open();
 
 	}
 

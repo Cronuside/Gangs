@@ -1,9 +1,12 @@
 package xyz.cronu.gangs;
 
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.cronu.gangs.commands.CommandBase;
+import xyz.cronu.gangs.commands.gangcommands.GangCMD;
 import xyz.cronu.gangs.config.ConfigManager;
 import xyz.cronu.gangs.managers.GangManager;
+import xyz.cronu.gangs.object.menu.MenuListener;
 
 import java.util.Arrays;
 
@@ -20,6 +23,12 @@ public final class Gangs extends JavaPlugin {
 		ConfigManager.getInstance().setPlugin(this);
 		configManager = ConfigManager.getInstance();
 		gangManager = new GangManager(this);
+
+		// TEST
+
+
+		initializeCommands(new GangCMD());
+		initializeListeners(new MenuListener());
 
 		gangManager.loadGangs();
 		gangManager.createGang();
@@ -39,6 +48,10 @@ public final class Gangs extends JavaPlugin {
 		System.out.println("Developed by: Cronu#0646");
 		System.out.println("");
 		System.out.println("--------- GANGS 1.0 ---------");
+	}
+
+	public void initializeListeners(Listener... listeners){
+		Arrays.stream(listeners).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
 	}
 
 	public void initializeCommands(CommandBase... commands){

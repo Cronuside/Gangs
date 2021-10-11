@@ -53,7 +53,7 @@ public class GangManager {
 
 			int random = ThreadLocalRandom.current().nextInt(1000000);
 
-			Gang gang = new Gang(UUID.randomUUID().toString(),
+			Gang gang = new Gang("Gang" + i,
 					UUID.randomUUID(),
 					memberlist,
 					new GangStat(random, random, random));
